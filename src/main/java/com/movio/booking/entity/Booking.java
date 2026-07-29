@@ -24,6 +24,7 @@ public class Booking {
     private Status status = Status.PENDING;
 
     private Double totalAmount;
+    private String qrPayload;
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public enum Status {

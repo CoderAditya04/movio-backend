@@ -20,6 +20,7 @@ public class BookingService {
     private final ShowRepository showRepository;
     private final UserRepository userRepository;
     private final PaymentService paymentService;
+    private final QrCodeService qrCodeService;
 
     @Transactional
     public Booking createPendingBooking(Long showId, List<Long> showSeatIds, Long userId) {
@@ -84,6 +85,7 @@ public class BookingService {
         if (result.success()) {
             payment.setStatus(Payment.Status.SUCCESS);
             booking.setStatus(Booking.Status.CONFIRMED);
+            booking.setQrPayload(qrCodeService.generateSignedPayload(booking.getId()));
 
             for (BookingSeat bs : bookingSeats) {
                 ShowSeat seat = showSeatRepository.findByIdForUpdate(bs.getShowSeat().getId())
