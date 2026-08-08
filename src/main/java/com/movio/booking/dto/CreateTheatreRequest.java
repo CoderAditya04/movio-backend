@@ -1,3 +1,14 @@
 package com.movio.booking.dto;
 
-public record CreateTheatreRequest(String name, String city, String address) {}
+import jakarta.validation.constraints.NotBlank;
+
+public record CreateTheatreRequest(
+        @NotBlank(message = "Theatre name is required")
+        String name,
+
+        @NotBlank(message = "City is required")
+        String city,
+
+        @NotBlank(message = "Address is required")
+        String address
+) {}

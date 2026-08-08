@@ -3,6 +3,7 @@ package com.movio.booking.service;
 import com.movio.booking.entity.*;
 import com.movio.booking.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class SeatLockExpiryJob {
@@ -53,7 +55,9 @@ public class SeatLockExpiryJob {
             });
         }
 
-        System.out.println("Released " + expiredSeats.size() + " expired locks, expired "
-                + affectedBookingIds.size() + " stale bookings");
+        if (!expiredSeats.isEmpty()) {
+            log.info("Released {} expired seat locks, expired {} stale bookings",
+                    expiredSeats.size(), affectedBookingIds.size());
+        }
     }
 }

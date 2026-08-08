@@ -1,9 +1,11 @@
 package com.movio.booking.controller;
 
+import com.movio.booking.dto.BulkCreateShowsRequest;
 import com.movio.booking.dto.CreateShowRequest;
 import com.movio.booking.entity.Show;
 import com.movio.booking.entity.ShowSeat;
 import com.movio.booking.service.ShowService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +19,14 @@ public class ShowController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/api/admin/shows")
-    public Show createShow(@RequestBody CreateShowRequest req) {
+    public Show createShow(@Valid @RequestBody CreateShowRequest req) {
         return showService.createShow(req);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/api/admin/shows/bulk")
+    public List<Show> createShowsBulk(@RequestBody BulkCreateShowsRequest req) {
+        return showService.createShowsBulk(req);
     }
 
     @GetMapping("/api/shows/movie/{movieId}")

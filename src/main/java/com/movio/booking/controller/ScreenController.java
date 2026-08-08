@@ -3,6 +3,7 @@ package com.movio.booking.controller;
 import com.movio.booking.dto.CreateScreenRequest;
 import com.movio.booking.entity.Screen;
 import com.movio.booking.service.ScreenService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public class ScreenController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/api/admin/screens")
-    public Screen createScreen(@RequestBody CreateScreenRequest req) {
+    public Screen createScreen(@Valid @RequestBody CreateScreenRequest req) {
         return screenService.createScreen(req);
     }
 }

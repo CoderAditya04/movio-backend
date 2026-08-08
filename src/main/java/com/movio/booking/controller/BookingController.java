@@ -4,6 +4,7 @@ import com.movio.booking.dto.*;
 import com.movio.booking.entity.Booking;
 import com.movio.booking.security.UserPrincipal;
 import com.movio.booking.service.BookingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,7 +18,7 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public ResponseEntity<?> createBooking(@RequestBody CreateBookingRequest request,
+    public ResponseEntity<?> createBooking(@Valid @RequestBody CreateBookingRequest request,
                                            @AuthenticationPrincipal UserPrincipal principal) {
         try {
             Booking booking = bookingService.createPendingBooking(

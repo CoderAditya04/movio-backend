@@ -3,6 +3,7 @@ package com.movio.booking.controller;
 import com.movio.booking.dto.CreateTheatreRequest;
 import com.movio.booking.entity.Theatre;
 import com.movio.booking.service.TheatreService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,7 @@ public class TheatreController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/api/admin/theatres")
-    public Theatre createTheatre(@RequestBody CreateTheatreRequest req) {
+    public Theatre createTheatre(@Valid @RequestBody CreateTheatreRequest req) {
         return theatreService.createTheatre(req);
     }
 

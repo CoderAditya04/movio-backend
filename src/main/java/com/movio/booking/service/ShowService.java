@@ -1,5 +1,6 @@
 package com.movio.booking.service;
 
+import com.movio.booking.dto.BulkCreateShowsRequest;
 import com.movio.booking.dto.CreateShowRequest;
 import com.movio.booking.entity.*;
 import com.movio.booking.repository.*;
@@ -7,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,34 @@ public class ShowService {
 
         generateShowSeats(show, screen);
         return show;
+    }
+
+    @Transactional
+    public List<Show> createShowsBulk(BulkCreateShowsRequest req) {
+        Movie movie = movieRepository.findById(req.movieId())
+                .orElseThrow(() -> new RuntimeException("Movie not found"));
+
+        List<Show> createdShows = new ArrayList<>();
+
+        for (Long screenId : req.screenIds()) {
+            Screen screen = screenRepository.findById(screenId)
+                    .orElseThrow(() -> new RuntimeException("Screen not found: " + screenId));
+
+            for (LocalDateTime startTime : req.startTimes()) {
+                Show show = new Show();
+                show.setMovie(movie);
+                show.setScreen(screen);
+                show.setStartTime(startTime);
+                show.setEndTime(startTime.plusMinutes(req.durationMinutes()));
+                show.setBasePrice(req.basePrice());
+                show = showRepository.save(show);
+
+                generateShowSeats(show, screen);
+                createdShows.add(show);
+            }
+        }
+
+        return createdShows;
     }
 
     private void generateShowSeats(Show show, Screen screen) {
